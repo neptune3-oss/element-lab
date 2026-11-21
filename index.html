@@ -9,17 +9,17 @@ html{scroll-padding-top:env(safe-area-inset-top,0px)}
 html,body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"PingFang TC","Noto Sans TC",sans-serif}
 h1{font-size:18px;margin:10px 12px 2px}
 .sub{font-size:12px;color:var(--mut);margin:0 12px 8px}
-#tw{padding:0 8px 8px;--c:min(36px,calc((100vw - 33px)/18))}
+#tw{padding:0 8px 8px;--z:1;--c:calc(min(36px,(100vw - 33px)/18)*var(--z));overflow-x:auto}
 #pt{display:grid;grid-template-columns:repeat(18,var(--c));grid-template-rows:repeat(7,calc(var(--c)*1.12)) calc(var(--c)*.3) repeat(2,calc(var(--c)*1.12));gap:1px;width:max-content;margin:0 auto}
 .el{border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;user-select:none;color:#fff;cursor:pointer}
 .el b{font-size:max(8px,calc(var(--c)*.4))}.el small{font-size:max(5px,calc(var(--c)*.23));opacity:.9;margin-top:1px}@media(max-width:560px){.el small{display:none}.el{border-radius:3px}}
-.el:active{filter:brightness(1.4)}
+.el:active{filter:brightness(1.4)}#tw.big .el small{display:block;font-size:max(7px,calc(var(--c)*.26))}.zb{display:none}html{height:100dvh}body{height:100%;display:flex;flex-direction:column;overflow:hidden}h1{font-size:16px;margin:6px 12px 2px;flex:none}.sub{display:none}#tw{--z:1!important;flex:1;min-height:0;overflow:auto;display:flex;padding:4px 8px}#pt{margin:auto}#rx{flex:none;margin:0;border-radius:16px 16px 0 0;max-height:58vh;overflow:auto}#info{max-height:64px;overflow:auto}#lens{position:fixed;z-index:15;display:grid;grid-template-columns:repeat(5,52px);grid-auto-rows:48px;gap:3px;padding:6px;background:#0e1530f2;border:1px solid #3b4880;border-radius:14px;box-shadow:0 8px 24px #000a}#lens[hidden]{display:none}.lc{border-radius:8px;color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.1;cursor:pointer;user-select:none}.lc b{font-size:17px}.lc small{font-size:10px;opacity:.9}.lc.ct{outline:2px solid #fff}.lc:active{filter:brightness(1.5)}.lc.em{visibility:hidden}.zb button{flex:none;padding:4px 14px;font-size:16px;border-radius:8px;background:#2d3865}
 .ghost{position:fixed;z-index:9;transform:translate(-50%,-50%);background:#fff;color:#000;border-radius:50%;width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-weight:700;pointer-events:none}
-#rx{margin:4px 10px 12px;background:var(--panel);border-radius:16px;padding:10px}
-#cv{width:100%;height:300px;display:block;border-radius:12px;background:#070b18}
+#rx{margin:4px 10px 12px;background:var(--panel);border-radius:16px;padding:8px}
+#cv{width:100%;height:clamp(110px,16vh,160px);display:block;border-radius:12px;background:#070b18}
 #chips{min-height:30px;margin:8px 0 4px;display:flex;flex-wrap:wrap;gap:6px}
 .chip{background:#232c52;border-radius:14px;padding:4px 10px;font-size:13px}
-.bar{display:flex;gap:8px;margin:6px 0}#gm{margin-bottom:8px}#gt{display:flex;gap:10px;align-items:flex-start;background:#1c2547;border-radius:12px;padding:10px}#av{font-size:34px}#bub{font-size:14px;line-height:1.6;flex:1}#sc{font-size:12px;color:#ffb86b;margin:6px 2px 0;min-height:14px}.hl{outline:3px solid #ffd54a;outline-offset:-1px;animation:pl .6s infinite alternate;position:relative;z-index:2}@keyframes pl{to{outline-offset:3px;filter:brightness(1.6)}}
+.bar{display:flex;gap:8px;margin:6px 0}#gm{margin-bottom:8px}#gt{display:flex;gap:10px;align-items:flex-start;background:#1c2547;border-radius:12px;padding:10px}#av{font-size:26px}#bub{font-size:14px;line-height:1.6;flex:1}#sc{font-size:12px;color:#ffb86b;margin:6px 2px 0;min-height:14px}.hl{outline:3px solid #ffd54a;outline-offset:-1px;animation:pl .6s infinite alternate;position:relative;z-index:2}@keyframes pl{to{outline-offset:3px;filter:brightness(1.6)}}#tst{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:50%;transform:translate(-50%,-20px);background:#ffd54a;color:#222;padding:10px 16px;border-radius:14px;font-weight:700;font-size:14px;text-align:center;opacity:0;transition:.3s;z-index:20;pointer-events:none;max-width:90vw}#cdx{position:fixed;inset:0;background:var(--bg);z-index:15;display:none;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}#cdx.on{display:flex}#ch{display:flex;align-items:center;gap:8px;padding:10px 12px;border-bottom:1px solid #26305a}#ch b{flex:1;font-size:16px;line-height:1.4}#ctab{display:flex;gap:6px;padding:8px 10px}#ctab button{flex:1;padding:8px;font-size:13px;background:#2d3865}#ctab button.on{background:#e0653a}#cb{flex:1;overflow:auto;padding:10px;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;align-content:start}.cd{background:var(--panel);border-radius:12px;padding:10px;font-size:12px;line-height:1.5}.cd .f{font-size:20px;font-weight:700;color:#ffb86b}.cd.lk{opacity:.7}.cd button{padding:6px;font-size:12px;margin-top:6px;width:100%}
 button{flex:1;font:inherit;font-size:16px;font-weight:700;border:0;border-radius:12px;padding:12px;color:#fff;background:#e0653a}
 button.g{background:#2d3865;flex:.5}
 button:disabled{opacity:.4}
@@ -29,9 +29,10 @@ button:disabled{opacity:.4}
 </style></head><body>
 <h1>⚗️ 元素實驗室</h1>
 <p class="sub">點一下元素丟進反應爐(電腦可用滑鼠拖曳),再按「反應」</p>
-<div id="tw"><div id="pt"></div></div>
+<div class="zb"><span id="zl">縮放 100%</span><button id="zm">－</button><button id="zp">＋</button></div><div id="tw"><div id="pt"></div></div>
+<div id="cdx"><div id="ch"><b id="ct">📖 化學圖鑑</b><button class="g" id="cc" style="flex:none;padding:8px 14px">✕</button></div><div id="ctab"><button data-f="all" class="on">全部</button><button data-f="ul">已解鎖</button><button data-f="lk">未解鎖</button></div><div id="cb"></div></div><div id="tst"></div>
 <div id="rx">
-<div id="gm"><div id="gt"><span id="av">👩‍🏫</span><div id="bub">想挑戰看看嗎？老師會出 10 題，每題 10 分，答對才拿分喔！</div></div><div id="sc"></div><div class="bar"><button id="gs">🎓 開始挑戰</button></div></div>
+<div id="gm"><div id="gt"><span id="av">👩‍🏫</span><div id="bub">想挑戰看看嗎？老師會出 10 題，每題 10 分，答對才拿分喔！</div></div><div id="sc"></div><div class="bar"><button id="cx" class="g" style="flex:.8">📖 圖鑑</button><button id="gh" style="display:none">💡 提示</button><button id="gs">🎓 開始挑戰</button></div></div>
 <canvas id="cv"></canvas>
 <div id="chips"></div>
 <div class="bar"><button id="go" disabled>🔥 反應</button><button id="clr" class="g">清空</button><button id="mu" class="g" style="flex:.2">🔊</button></div>
@@ -81,7 +82,7 @@ function calc(c0){
  const lines=Object.values(seen).map(({p,k})=>`<b>${sub(p.f)}</b> ${p.n} ×${k}:${p.d}`);
  if(boom&&lines.length)lines.push("⚠️ 反應十分劇烈!");
  if(!mols.length&&!msg.length)msg.push("這些元素之間沒有發生反應(或這個反應還沒收錄)");
- return{mols,boom,rad,html:[...lines,...msg].join("<br>")}}
+ return{mols,boom,rad,prods:Object.values(seen).map(x=>x.p),html:[...lines,...msg].join("<br>")}}
 
 /* ---- audio ---- */
 let AC,mute=false;
@@ -98,11 +99,11 @@ rs();addEventListener('resize',rs);
 let lt=0,pops=[],bg=Array.from({length:30},()=>({x:Math.random(),y:Math.random(),s:Math.random()*1.5+.5,v:Math.random()*.0004+.0001})),atoms=[],mols=[],parts=[],ph=0,t0=0,res=null,flash=0,shake=0,rings=[],last=0,fc=0;
 const say=t=>$('st').textContent=t,MAX=24;
 function chips(){const c={};atoms.forEach(a=>c[a.s]=(c[a.s]||0)+1);$('chips').innerHTML="";Object.keys(c).forEach(s=>{const e=document.createElement('span');e.className='chip';e.textContent=`${s} ×${c[s]} ✕`;e.onclick=()=>{if(ph)back();const i=atoms.map(a=>a.s).lastIndexOf(s);atoms.splice(i,1);chips()};$('chips').appendChild(e)});$('go').disabled=!atoms.length;tutChk()}
-function back(){ph=0;mols=[];res=null;rings=[];$('info').innerHTML="";$('go').textContent="🔥 反應";atoms.forEach(a=>{a.tx=null;a.rt=a.r;a.vx=(Math.random()-.5)*6;a.vy=-3})}
+function back(){view=0;man=0;ph=0;mols=[];res=null;rings=[];$('info').innerHTML="";$('go').textContent="🔥 反應";atoms.forEach(a=>{a.tx=null;a.rt=a.r;a.vx=(Math.random()-.5)*6;a.vy=-3})}
 function add(z){tone(260+z*6,.18,"sine",.12,520+z*6);if(ph)back();if(atoms.length>=MAX){say("反應爐已滿(最多 24 個原子)");return}
  const r=12+Math.min(z,86)/10;atoms.push({z,s:S[z-1],x:W*(.15+.7*Math.random()),y:r,vx:(Math.random()-.5)*4,vy:2,r,rt:r,dr:r,col:col(z)});chips();say(`${N[z-1]} ${S[z-1]}(原子序 ${z})`)}
 let dragT=0;
-pt.addEventListener('click',e=>{const el=e.target.closest('.el');if(el&&performance.now()-dragT>80)add(+el.dataset.z)});
+pt.addEventListener('click',e=>{const el=e.target.closest('.el');if(!el||performance.now()-dragT<=80)return;if(matchMedia('(hover:hover) and (pointer:fine)').matches)add(+el.dataset.z);else showLens(el)});
 pt.addEventListener('pointerdown',e=>{const el=e.target.closest('.el');if(!el||e.pointerType!="mouse")return;const z=+el.dataset.z;let moved=0;const sx=e.clientX,sy=e.clientY;const g=document.createElement('div');g.className='ghost';g.textContent=S[z-1];g.style.display='none';document.body.appendChild(g);
  const mv=v=>{if(!moved&&Math.hypot(v.clientX-sx,v.clientY-sy)<8)return;moved=1;g.style.display='flex';g.style.left=v.clientX+'px';g.style.top=v.clientY+'px'};
  const up=v=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);g.remove();if(moved){dragT=performance.now();const b=cv.getBoundingClientRect();if(v.clientX>b.left&&v.clientX<b.right&&v.clientY>b.top&&v.clientY<b.bottom)add(z)}};
@@ -122,13 +123,13 @@ function layout(){const M=mols.length;if(!M)return;const cols=M<=3?M:M<=8?4:6,ro
   as.forEach((a,j)=>{if(j==ci){a.tx=cx;a.ty=cy}else ord.push(a)});
   ord.forEach((a,j)=>{const ang=n==2?(j?0:Math.PI):j/k*2*Math.PI-Math.PI/2;a.tx=cx+Math.cos(ang)*rho*sc;a.ty=cy+Math.sin(ang)*rho*sc});
   as.forEach(a=>a.rt=a.r*sc);o.ci=ci;o.cx=cx;o.cy=cy;o.ly=cy+(rho+r)*sc+13})}
-function burst(){ph=3;boomSnd();setTimeout(()=>{if(gm.on&&ph==3){if(gm.tu==3)tutEnd();else if(!gm.w)judge()}},900);say("反应完成".replace("反应","反應"));$('info').innerHTML=res.html;
+function burst(){ph=3;boomSnd();setTimeout(()=>{if(ph==3){found();if(gm.on){if(gm.tu==3)tutEnd();else if(!gm.w)judge()}}},900);say("反应完成".replace("反应","反應"));$('info').innerHTML=res.html;
  flash=res.boom?1:.5;shake=res.boom?14:0;
  const mk=(x,y,n,c,sp)=>{for(let i=0;i<n;i++){const a=Math.random()*6.28,v=Math.random()*sp;parts.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,l:1,c})}};
  if(mols.length){const nm=[...new Set(mols.map(o=>sub(o.m.f)))].join(" + ");pops.push({x:W/2,y:H*.45,t:(res.boom?"💥 ":"✨ ")+nm,l:1});mols.forEach(o=>{const cs=o.as.map(a=>a.col);if(mols.length<=6)rings.push({x:o.cx,y:o.cy,r:5,v:res.boom?8:5,c:res.boom?"#ffb347":"#7fd4ff"},{x:o.cx,y:o.cy,r:5,v:res.boom?4:3,c:"#ffffff"});for(let i=0,nn=Math.ceil((res.boom?70:30)/mols.length);i<nn;i++){const a=Math.random()*6.28,v=Math.random()*(res.boom?11:6);parts.push({x:o.cx,y:o.cy,vx:Math.cos(a)*v,vy:Math.sin(a)*v,l:1,c:i%3?cs[i%cs.length]:"#fff"})}})}
  else if(res.boom){rings.push({x:W/2,y:H/2,r:5,c:"#fff3a0"});mk(W/2,H/2,70,"#ffd27f",12);atoms.forEach(a=>{a.vx=(a.x-W/2)*.12+(Math.random()-.5)*8;a.vy=(a.y-H/2)*.12-4})}}
 function tick(now){const dt=Math.min(2,(now-last)/16.7||1);last=now;const el=ph?(now-t0)/1000:0;
- if(ph==1&&el>1.1){ph=2;tone(300,.8,"triangle",.1,1400)}if(ph==2&&el>1.9)burst();
+ if(ph==1&&el>1.1){ph=2;tone(300,.8,"triangle",.1,1400)}if(ph==2&&el>1.9)burst();if(ph==3&&!view&&!man&&mols.length&&el>4.3){view=1;flash=.3;say("🔬 實物外觀（點一下反應爐可切換）")}
  atoms.forEach(a=>{
   if(ph==1){a.vx+=(Math.random()-.5)*2.2*dt;a.vy+=(Math.random()-.5)*2.2*dt;const v=Math.hypot(a.vx,a.vy);if(v>10){a.vx*=10/v;a.vy*=10/v}}
   else if(a.tx!=null&&ph>=2){const k=ph==2?.13:.3;a.x+=(a.tx-a.x)*k*dt;a.y+=(a.ty-a.y)*k*dt;a.dr+=(a.rt-a.dr)*.15*dt;return}
@@ -157,6 +158,7 @@ function draw(el){ctx.setTransform(dpr,0,0,dpr,0,0);ctx.fillStyle=ph==1||ph==2?"
  parts.forEach(p=>{ctx.globalAlpha=Math.max(0,p.l);ctx.fillStyle=p.c;ctx.beginPath();ctx.arc(p.x,p.y,2.5,0,6.283);ctx.fill()});
  rings.forEach(r=>{ctx.globalAlpha=Math.max(0,1-r.r/(Math.max(W,H)*.6));ctx.strokeStyle=r.c;ctx.lineWidth=4;ctx.beginPath();ctx.arc(r.x,r.y,r.r,0,6.283);ctx.stroke()});
  ctx.globalAlpha=1;ctx.restore();ctx.globalCompositeOperation="source-over";
+ if(view&&ph==3&&mols.length){ctx.fillStyle="#070b18";ctx.fillRect(0,0,W,H);macro(el)}
  pops.forEach(p=>{ctx.globalAlpha=Math.min(1,p.l*1.5);ctx.fillStyle="#fff";ctx.font="700 22px system-ui";ctx.textAlign="center";ctx.fillText(p.t,p.x,p.y)});ctx.globalAlpha=1;
  if(flash>.02){ctx.fillStyle=`rgba(255,240,200,${flash*.8})`;ctx.fillRect(0,0,W,H)}
  if(!atoms.length){ctx.fillStyle="#4a5688";ctx.font="14px system-ui";ctx.textAlign="center";ctx.fillText("反應爐是空的,點選上方元素吧",W/2,H/2)}}
@@ -174,12 +176,84 @@ function judge(){const f=QS[gm.i][0],ok=res.mols.some(m=>m.f==f),cp=parse(f);gm.
  else{bub(`再想想看～這次沒有做出 ${sub(f)}。<br>💡 提示：需要用到 ${cp.map(x=>x[0]).join("、")}。即將重新開始…`);setTimeout(()=>{if(gm.on&&!gm.w&&ph==3)back()},2800)}
  sc()}
 const TT=[["第一步：點一下週期表左上角閃爍的 <b>H（氫）</b>，把它丟進反應爐。","H"],["很好！水需要 <b>2 個氫</b>，再點一次 H。","H"],["接著找到週期表右側閃爍的 <b>O（氧）</b>，點一下它！","O"],["最後按下閃爍的「🔥 反應」按鈕！","go"]];
-function hl(x){document.querySelectorAll('.hl').forEach(e=>e.classList.remove('hl'));if(x)x.classList.add('hl')}
+function hl(x){document.querySelectorAll('.hl').forEach(e=>e.classList.remove('hl'));if(x)x.classList.add('hl');if(typeof lensHl=="function")lensHl()}
 function tut(n){gm.tu=n;bub(`<b>🎓 教學關卡</b>（不計分）<br>${TT[n][0]}`);hl(TT[n][1]=="go"?$('go'):pt.children[zOf(TT[n][1])-1]);$('sc').textContent="教學 "+(n+1)+"/4"}
 function tutChk(){if(!gm.on||gm.tu<0||gm.tu>3)return;const c=s=>atoms.filter(a=>a.s==s).length,h=c("H"),o=c("O");
  if(atoms.length>h+o||h>2||o>1){bub("<b>🎓 教學關卡</b><br>哎呀，材料不太對喔。這關只需要 <b>2 個 H 和 1 個 O</b>，點標籤的 ✕ 可以移除多餘的。");hl(null);return}
  tut(h<1?0:h<2?1:o<1?2:3)}
 function tutEnd(){hl(null);gm.tu=4;bub("🎉 <b>教學完成！</b>你成功合成了水（H₂O）！<br>接下來是正式挑戰：共 10 題，每題 10 分，準備好了嗎？");$('sc').textContent="";[659,784,988,1319].forEach((q,i)=>tone(q,.4,"sine",.12,0,i*.08));$('gs').style.display="";$('gs').textContent="開始正式挑戰 ▶"}
+/* ---- codex ---- */
+const CAT_=[],NOB=["He","Ne","Ar","Kr","Xe","Rn","Og"];
+REC.forEach(r=>CAT_.push({id:r.f,f:r.f,n:r.n,d:r.d,c:r.c,t:"分子"}));
+DI.forEach(s=>CAT_.push({id:s+"2",f:s+"2",n:N[zOf(s)-1]+"分子",d:"兩個原子共用電子，形成穩定的雙原子分子",c:[[s,2]],t:"分子"}));
+for(const a in ANI)for(const k in CAT){const va=ANI[a],vc=CAT[k],g=gcd(va,vc),p=[[k,va/g],[a,vc/g]],f=fm(p);CAT_.push({id:f,f,n:(a=="O"?"氧":N[zOf(a)-1])+"化"+N[zOf(k)-1],d:"金屬與非金屬透過電子轉移結合成離子化合物",c:p,t:"離子化合物"})}
+ALK.forEach(k=>CAT_.push({id:k+"OH",f:k+"OH",n:"氫氧化"+N[zOf(k)-1],d:"活潑的鹼金屬遇水猛烈反應，放熱、冒氣並可能爆炸",c:[[k,1],["O",1],["H",1]],t:"鹼"}));
+CAT_.push({id:"FISS",f:"☢️",n:"核分裂",d:"鈹或黷的原子核分裂，釋放巨大能量",c:[["U",1]],t:"特殊現象",h:"試試非常重的元素"},{id:"RAD",f:"☢️",n:"放射性衰變",d:"不穩定的重元素自行衰變並釋放輻射",c:[["Po",1]],t:"特殊現象",h:"試試週期表最下方的元素"},{id:"NOBLE",f:"💤",n:"惰性氣體",d:"氦、汖、氬等惰性氣體幾乎不與其他元素反應",c:[["He",1]],t:"特殊現象",h:"有些元素很「懶」，不想跟任何人反應"});
+const CM=Object.fromEntries(CAT_.map(c=>[c.id,c]));let UL=new Set(),cf="all",tt_;
+try{UL=new Set(JSON.parse(localStorage.getItem('elab-ul')||'[]'))}catch(e){}
+function toast(h){const e=$('tst');e.innerHTML=h;e.style.opacity=1;e.style.transform="translate(-50%,0)";clearTimeout(tt_);tt_=setTimeout(()=>{e.style.opacity=0;e.style.transform="translate(-50%,-20px)"},3200)}
+function found(){const ids=[...new Set(res.mols.map(m=>m.f))];if(atoms.some(a=>a.s=="U"||a.s=="Pu"))ids.push("FISS");else if(res.rad)ids.push("RAD");if(atoms.some(a=>NOB.includes(a.s)))ids.push("NOBLE");
+ const nw=ids.filter(i=>CM[i]&&!UL.has(i));if(!nw.length)return;nw.forEach(i=>UL.add(i));try{localStorage.setItem('elab-ul',JSON.stringify([...UL]))}catch(e){}
+ toast("🔓 解鎖新反應！<br>"+nw.map(i=>sub(CM[i].f)+" "+CM[i].n).join("、")+`<br><small>圖鑑 ${UL.size}/${CAT_.length}</small>`);[784,988,1175,1568].forEach((q,i)=>tone(q,.35,"triangle",.12,0,i*.07));cx_upd()}
+function cx_upd(){const n=UL.size,T=CAT_.length,ti=n>=T?"化學大師":n>=T*.7?"化學教授":n>=T*.4?"研究員":n>=T*.15?"實驗助理":"實驗室新手",lock=gm.on&&gm.tu<0&&!gm.w;
+ $('ct').innerHTML=`📖 化學圖鑑 ${n}/${T}<br><small style="font-weight:400;color:#8b95c4">稱號：${ti}</small>`;$('cx').textContent=`📖 圖鑑 ${n}/${T}`;
+ $('cb').innerHTML=CAT_.filter(c=>cf=="all"||(cf=="ul")==UL.has(c.id)).map(c=>UL.has(c.id)?`<div class="cd"><div class="f">${sub(c.f)}</div><b>${c.n}</b><br>${c.d}<br>配方：${c.c.map(x=>x[1]+" "+x[0]).join(" + ")}${lock?"":`<button data-id="${c.id}">▶ 放進反應爐</button>`}</div>`:`<div class="cd lk"><div class="f">？？？</div>${c.t}<br>💡 ${c.h||`由 ${c.c.length} 種元素、共 ${c.c.reduce((s,x)=>s+x[1],0)} 個原子組成`}</div>`).join("")}
+$('cx').onclick=()=>{$('cdx').classList.add('on');cx_upd()};$('cc').onclick=()=>$('cdx').classList.remove('on');
+$('ctab').onclick=e=>{const b=e.target.closest('button');if(!b)return;cf=b.dataset.f;[...$('ctab').children].forEach(x=>x.classList.toggle('on',x==b));cx_upd()};
+$('cb').onclick=e=>{const b=e.target.closest('button');if(!b)return;const c=CM[b.dataset.id];$('cdx').classList.remove('on');atoms=[];back();chips();c.c.forEach(([s,n])=>{for(let i=0;i<n;i++)add(zOf(s))});say("配方已放入，按「反應」試試看！")};
+cx_upd();
+const ZL=[1,1.4,1.8,2.4];let zi=0;
+function zset(){$('tw').style.setProperty('--z',ZL[zi]);$('tw').classList.toggle('big',ZL[zi]>=1.4);$('zl').textContent="縮放 "+Math.round(ZL[zi]*100)+"%（可左右滑動）";try{localStorage.setItem('elab-z',zi)}catch(e){}}
+$('zm').onclick=()=>{zi=Math.max(0,zi-1);zset()};$('zp').onclick=()=>{zi=Math.min(3,zi+1);zset()};zset();
+/* ---- lens ---- */
+const PM={};S.forEach((s,i)=>{const[r,c]=pos(i+1);PM[r+","+c]=i+1});
+const lens=document.createElement('div');lens.id='lens';lens.hidden=true;document.body.appendChild(lens);
+function showLens(el){const z0=+el.dataset.z,[r0,c0]=pos(z0);let h="";
+ for(let r=r0-1;r<=r0+1;r++)for(let c=c0-2;c<=c0+2;c++){const z=PM[r+","+c];h+=z?`<div class="lc${z==z0?' ct':''}${pt.children[z-1].classList.contains('hl')?' hl':''}" data-z="${z}" style="background:${col(z)}"><b>${S[z-1]}</b><small>${N[z-1]}</small></div>`:`<div class="lc em"></div>`}
+ lens.innerHTML=h;lens.hidden=false;const b=el.getBoundingClientRect(),w=lens.offsetWidth,hh=lens.offsetHeight;let x=b.left+b.width/2-w/2,y=b.top-hh-8;if(y<4)y=b.bottom+8;lens.style.left=Math.max(4,Math.min(innerWidth-w-4,x))+"px";lens.style.top=y+"px"}
+lens.addEventListener('click',e=>{const c=e.target.closest('.lc');if(c&&c.dataset.z)add(+c.dataset.z)});
+document.addEventListener('pointerdown',e=>{if(!e.target.closest('#lens')&&!e.target.closest('#pt'))lens.hidden=true});
+function lensHl(){lens.querySelectorAll('.lc[data-z]').forEach(b=>b.classList.toggle('hl',pt.children[b.dataset.z-1].classList.contains('hl')))}
+/* ---- macro view ---- */
+let view=0,man=0;
+const LK={H2O:["l","#3aa0ff","無色透明液體"],H2O2:["l","#a8dcff","無色液體"],C2H6O:["l","#bfe3ff","無色液體"],H2SO4:["l","#e9dfa8","無色油狀液體"],HNO3:["l","#f0e6b8","無色液體"],Br2:["l","#b5361c","紅棕色液體"],CO2:["g","#dfe6ff","無色氣體"],CO:["g","#e6e9ff","無色氣體（有毒）"],CH4:["g","#e6e9ff","無色氣體"],NH3:["g","#e6e9ff","無色刺鼻氣體"],SO2:["g","#e6e9ff","無色刺激性氣體"],H2S:["g","#eef0b0","無色臭蛋味氣體"],HCl:["g","#e6e9ff","無色氣體"],HF:["g","#e6e9ff","無色氣體"],NO2:["g","#c8672a","紅棕色氣體"],O3:["g","#8cc0ff","淡藍色氣體"],Cl2:["g","#b8e04a","黃綠色氣體"],F2:["g","#e6f2a0","淡黃色氣體"],I2:["s","#5b2c83","紫黑色固體","c"],C6H12O6:["s","#ffffff","白色結晶","c"],SiO2:["s","#efe8d6","無色或白色的沙粒","p"],CaCO3:["s","#f2f2f2","白色粉末","p"],Fe2O3:["s","#b0401f","紅棕色粉末","p"],CuO:["s","#4a4a4a","黑色粉末","p"],Ag2S:["s","#555555","黑色固體","p"],MgO:["s","#fafafa","白色粉末","p"],Al2O3:["s","#f0f0f0","白色粉末","p"]};
+const lookOf=f=>LK[f]||(parse(f).length==1?["g","#e8ecff","無色氣體"]:["s","#f6f6f6","白色晶體","c"]),rnd=i=>{const x=Math.sin(i*127.1+311.7)*43758.5453;return x-Math.floor(x)};
+function liq(cx,cy,s,c,t){const w=s*.7,h=s*.9,x=cx-w/2,y=cy-h/2,lv=y+h*.35;ctx.save();ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x,y+h-8);ctx.quadraticCurveTo(x,y+h,x+10,y+h);ctx.lineTo(x+w-10,y+h);ctx.quadraticCurveTo(x+w,y+h,x+w,y+h-8);ctx.lineTo(x+w,y);ctx.strokeStyle="rgba(255,255,255,.6)";ctx.lineWidth=2.5;ctx.stroke();ctx.clip();
+ ctx.globalAlpha=.78;ctx.fillStyle=c;ctx.beginPath();ctx.moveTo(x,lv);for(let i=0;i<=w;i+=4)ctx.lineTo(x+i,lv+Math.sin(i/9+t*3)*3);ctx.lineTo(x+w,y+h);ctx.lineTo(x,y+h);ctx.fill();
+ ctx.globalAlpha=.5;ctx.fillStyle="#fff";ctx.fillRect(x+7,y+8,4,h-24);for(let i=0;i<5;i++){const by=y+h-((t*30+i*37)%(y+h-lv));ctx.beginPath();ctx.arc(x+w*(.2+.15*i)+Math.sin(t*2+i)*3,by,2+i%2,0,6.283);ctx.fill()}ctx.restore()}
+function gas(cx,cy,s,c,t){const w=s*.55,h=s*.95,x=cx-w/2,y=cy-h/2;ctx.save();ctx.strokeStyle="rgba(255,255,255,.55)";ctx.lineWidth=2.5;ctx.strokeRect(x,y,w,h);ctx.fillStyle=c;ctx.globalAlpha=.16;ctx.fillRect(x,y,w,h);ctx.beginPath();ctx.rect(x,y,w,h);ctx.clip();ctx.globalAlpha=.5;
+ for(let i=0;i<16;i++){ctx.beginPath();ctx.arc(x+w*(.1+.8*((i*37%10)/10))+Math.sin(t*1.5+i)*8,y+h-((t*22+i*29)%h),3+i%3*2,0,6.283);ctx.fill()}ctx.restore()}
+function sol(cx,cy,s,c,sh,f){const bw=s*.8,by=cy+s*.3;ctx.save();ctx.fillStyle="rgba(200,210,255,.25)";ctx.beginPath();ctx.ellipse(cx,by+6,bw/2,8,0,0,6.283);ctx.fill();ctx.fillStyle=c;
+ for(let i=0,n=sh=="c"?36:90;i<n;i++){const r1=rnd(i+f.length),r2=rnd(i*3+7),x=cx+(r1-.5)*bw*(1-r2*.7),y=by-r2*s*.45;
+  if(sh=="c"){const z=6+r2*3;ctx.save();ctx.translate(x,y);ctx.rotate(r1*3);ctx.fillRect(-z/2,-z/2,z,z);ctx.strokeStyle="rgba(255,255,255,.7)";ctx.strokeRect(-z/2,-z/2,z,z);ctx.restore()}else{ctx.beginPath();ctx.arc(x,y,2.2+r2*1.5,0,6.283);ctx.fill()}}ctx.restore()}
+const MAD=["CO","NO2","SO2","H2S","Cl2","HF","HCl","NH3","H2SO4","HNO3","Br2"];
+function toon(cx,cy,s,c,st,sh,f,t){const r=s*.34,b=Math.abs(Math.sin(t*3+f.length))*s*.07,mad=MAD.includes(f),fy=st=="l"?.35*r:st=="g"?.1*r:.05*r;
+ ctx.save();ctx.fillStyle="rgba(0,0,0,.35)";ctx.beginPath();ctx.ellipse(cx,cy+r*1.3,r*(.9-b/s),r*.14,0,0,6.283);ctx.fill();
+ ctx.translate(cx,cy-b);ctx.lineWidth=Math.max(3,s*.035);ctx.strokeStyle="#1a1f3a";ctx.lineJoin=ctx.lineCap="round";ctx.fillStyle=c;
+ if(st=="g"){const C=[[-.62,.22,.5],[0,-.12,.68],[.62,.22,.5],[0,.3,.62]],cc=()=>C.forEach(([x,y,k])=>{ctx.beginPath();ctx.arc(x*r*1.2,y*r*1.2,k*r*1.2,0,6.283);ctx.fill()});ctx.lineWidth*=2;C.forEach(([x,y,k])=>{ctx.beginPath();ctx.arc(x*r*1.2,y*r*1.2,k*r*1.2,0,6.283);ctx.fill();ctx.stroke()});cc();ctx.lineWidth/=2}
+ else{ctx.beginPath();
+  if(st=="l"){ctx.moveTo(0,-r*1.35);ctx.bezierCurveTo(r*.3,-r*.8,r*1.05,-r*.2,r*1.05,r*.35);ctx.bezierCurveTo(r*1.05,r*.95,r*.55,r*1.25,0,r*1.25);ctx.bezierCurveTo(-r*.55,r*1.25,-r*1.05,r*.95,-r*1.05,r*.35);ctx.bezierCurveTo(-r*1.05,-r*.2,-r*.3,-r*.8,0,-r*1.35)}
+  else if(sh=="c"){const a=r*.95,k=r*.3;ctx.moveTo(-a+k,-a);ctx.arcTo(a,-a,a,a,k);ctx.arcTo(a,a,-a,a,k);ctx.arcTo(-a,a,-a,-a,k);ctx.arcTo(-a,-a,a,-a,k)}
+  else{ctx.moveTo(-r*1.1,r*.95);ctx.quadraticCurveTo(-r*1.1,-r,0,-r);ctx.quadraticCurveTo(r*1.1,-r,r*1.1,r*.95)}
+  ctx.closePath();ctx.fill();ctx.stroke()}
+ ctx.globalAlpha=.45;ctx.fillStyle="#fff";ctx.beginPath();ctx.ellipse(-r*.5,-r*.45,r*.12,r*.24,.5,0,6.283);ctx.fill();ctx.globalAlpha=1;
+ const bl=(t+f.length)%3.2<.12;ctx.lineWidth=Math.max(2,s*.025);
+ [-1,1].forEach(d=>{const ex=d*r*.36;if(bl){ctx.beginPath();ctx.moveTo(ex-r*.14,fy);ctx.lineTo(ex+r*.14,fy);ctx.stroke()}else{ctx.fillStyle="#fff";ctx.beginPath();ctx.arc(ex,fy,r*.17,0,6.283);ctx.fill();ctx.stroke();ctx.fillStyle="#1a1f3a";ctx.beginPath();ctx.arc(ex+Math.sin(t*1.3)*r*.05,fy+r*.02,r*.08,0,6.283);ctx.fill()}
+  if(mad){ctx.beginPath();ctx.moveTo(ex+d*r*.2,fy-r*.36);ctx.lineTo(ex-d*r*.2,fy-r*.22);ctx.stroke()}else{ctx.globalAlpha=.4;ctx.fillStyle="#ff7a9a";ctx.beginPath();ctx.arc(d*r*.62,fy+r*.28,r*.11,0,6.283);ctx.fill();ctx.globalAlpha=1}});
+ ctx.beginPath();if(mad)ctx.arc(0,fy+r*.52,r*.17,1.15*Math.PI,1.85*Math.PI);else ctx.arc(0,fy+r*.2,r*.2,.1*Math.PI,.9*Math.PI);ctx.stroke();ctx.restore()}
+function macro(t){const fs=[...new Set(mols.map(o=>o.m.f))].slice(0,3),n=fs.length;fs.forEach((f,i)=>{const[st,c,lb,sh]=lookOf(f),cx=W*(i+.5)/n,cy=H*.46,s=Math.min(W/n*.8,H*.72),nm=((res.prods||[]).find(p=>p.f==f)||{}).n||"";
+ toon(cx,cy,s,c,st,sh,f,t);
+ ctx.textAlign="center";ctx.fillStyle="#fff";ctx.font="700 13px system-ui";ctx.fillText(sub(f)+" "+nm,cx,H-20);ctx.fillStyle="#9fb0e8";ctx.font="11px system-ui";ctx.fillText(lb,cx,H-6)})}
+cv.addEventListener('click',()=>{if(ph==3&&mols.length){view^=1;man=1;flash=.3;say(view?"🔬 實物外觀（點一下回到分子模型）":"⚛️ 分子模型（點一下看實物）")}});
+/* ---- hints ---- */
+const QT=["我們來合成「水」吧！請用元素做出水分子。","呼吸時吐出的「二氧化碳」，請你合成出來！","廚房裡的「食鹽」，化學式是 NaCl，試試看！","天然氣的主要成分「甲烷」，1 個碳要配幾個氫呢？","肥料的原料「氨」，由氮和氫組成。","我們呼吸的「氧氣」是雙原子分子，怎麼做？","保護地球的「臭氧」，比氧氣多一個原子。","鎂帶燃燒會發出耀眼白光，生成「氧化鎂」。","鐵生锈會變成「氧化鐵」Fe₂O₃，試試看！","最後挑戰！鈉遇到水會劇烈反應，生成「氫氧化鈉」。小心爆炸！"];
+QS.forEach((q,i)=>q[1]=QT[i]);
+const HC=["地球表面約 71% 都被它覆蓋，生命離不開它。","汽水裡的氣泡就是它，植物行光合作用也需要它。","它是由一個很活潑的金屬和一個有毒的氣體元素結合而成的調味料。","沼氣和牛打嗝裡都有它，一個碳原子位在中間，周圍圍著氫。","清潔劑和尿液常有它刺鼻的味道，由氮和氫組成。","我們每一口呼吸都需要它，由兩個一樣的原子手拉手。","在高空形成保護層擋住紫外線，比氧氣多一個原子。","鎂帶燃燒的強光就是反應的證據，鎂要和氧結合。","鐵放在潮濕的地方會變紅棕色，這是鐵和氧結合的結果，注意化學式裡的小數字。","又叫燒鹼，腳蜥性很強，鈉、氧、氫各一個。"];
+const _ask=ask;ask=function(){gm.hh=0;$('gh').textContent="💡 提示";_ask()};
+$('gh').onclick=()=>{const q=QS[gm.i],cp=parse(q[0]),nm=s=>N[zOf(s)-1];gm.hh=Math.min(3,(gm.hh||0)+1);
+ const L=[HC[gm.i],"需要用到："+cp.map(([s])=>nm(s)+"（"+s+"）").join("、"),"配方："+cp.map(([s,n])=>n+" 個"+nm(s)).join("、")+"（共 "+cp.reduce((x,y)=>x+y[1],0)+" 個原子）"];
+ bub(`<b>第 ${gm.i+1} 題</b>（10 分）<br>${q[1]}<br>💡 提示 ${gm.hh}/3：<br>${L.slice(0,gm.hh).join("<br>")}`);$('gh').textContent="💡 提示（"+gm.hh+"/3）";tone(660,.2,"sine",.1)};
+setInterval(()=>{$('gh').style.display=(gm.on&&gm.tu<0&&!gm.w)?"":"none"},300);
 function mix(hex,t){const n=parseInt(hex.slice(1),16),r=n>>16,g=n>>8&255,b=n&255;return`rgb(${r+(255-r)*t|0},${g+(150-g)*t|0},${b+(60-b)*t|0})`}
 requestAnimationFrame(tick);
 </script></body></html>
