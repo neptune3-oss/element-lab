@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-Hant"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>元素實驗室</title>
+<style>
+:root{--bg:#0b1020;--panel:#141b33;--tx:#e8ecff;--mut:#8b95c4;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,"PingFang TC","Noto Sans TC",sans-serif}
+h1{font-size:18px;margin:10px 12px 2px}
+.sub{font-size:12px;color:var(--mut);margin:0 12px 8px}
+#tw{overflow-x:auto;padding:0 8px 8px}
+#pt{display:grid;grid-template-columns:repeat(18,34px);grid-template-rows:repeat(7,38px) 10px 38px 38px;gap:2px;width:max-content}
+.el{border-radius:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;user-select:none;color:#fff;cursor:pointer}
+.el b{font-size:13px}.el small{font-size:8px;opacity:.9;margin-top:2px}
+.el:active{filter:brightness(1.4)}
+.ghost{position:fixed;z-index:9;transform:translate(-50%,-50%);background:#fff;color:#000;border-radius:50%;width:38px;height:38px;display:flex;align-items:center;justify-content:center;font-weight:700;pointer-events:none}
+#rx{margin:4px 10px 12px;background:var(--panel);border-radius:16px;padding:10px}
+#cv{width:100%;height:300px;display:block;border-radius:12px;background:#070b18}
+#chips{min-height:30px;margin:8px 0 4px;display:flex;flex-wrap:wrap;gap:6px}
+.chip{background:#232c52;border-radius:14px;padding:4px 10px;font-size:13px}
+.bar{display:flex;gap:8px;margin:6px 0}
+button{flex:1;font:inherit;font-size:16px;font-weight:700;border:0;border-radius:12px;padding:12px;color:#fff;background:#e0653a}
+button.g{background:#2d3865;flex:.5}
+button:disabled{opacity:.4}
+#st{font-size:13px;color:var(--mut);min-height:18px}
+#info{font-size:14px;line-height:1.6;margin-top:6px}
+#info b{color:#ffb86b}
+</style></head><body>
+<h1>⚗️ 元素實驗室</h1>
+<p class="sub">點一下元素丟進反應爐(電腦可用滑鼠拖曳),再按「反應」</p>
+<div id="tw"><div id="pt"></div></div>
+<div id="rx">
+<canvas id="cv"></canvas>
+<div id="chips"></div>
+<div class="bar"><button id="go" disabled>🔥 反應</button><button id="clr" class="g">清空</button><button id="mu" class="g" style="flex:.2">🔊</button></div>
+<div id="st"></div><div id="info"></div>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+const S="H He Li Be B C N O F Ne Na Mg Al Si P S Cl Ar K Ca Sc Ti V Cr Mn Fe Co Ni Cu Zn Ga Ge As Se Br Kr Rb Sr Y Zr Nb Mo Tc Ru Rh Pd Ag Cd In Sn Sb Te I Xe Cs Ba La Ce Pr Nd Pm Sm Eu Gd Tb Dy Ho Er Tm Yb Lu Hf Ta W Re Os Ir Pt Au Hg Tl Pb Bi Po At Rn Fr Ra Ac Th Pa U Np Pu Am Cm Bk Cf Es Fm Md No Lr Rf Db Sg Bh Hs Mt Ds Rg Cn Nh Fl Mc Lv Ts Og".split(" ");
+const N=Array.from("氫氦鋰鈹硼碳氮氧氟氖鈉鎂鋁矽磷硫氯氬鉀鈣鈧鈦釩鉻錳鐵鈷鎳銅鋅鎵鍺砷硒溴氪銣鍶釔鋯鈮鉬鎝釕銠鈀銀鎘銦錫銻碲碘氙銫鋇鑭鈰鐠釹鉕釤銪釓鋱鏑鈥鉺銩鐿鎦鉿鉭鎢錸鋨銥鉑金汞鉈鉛鉍釙砈氡鍅鐳錒釷鏷鈾鎿鈽鋂鋦鉳鉲鑀鐨鍆鍩鐒鑪𨧀𨭎𨨏𨭆䥑鐽錀鎶鉨鈇鏌鉝鿬鿫");
+const G=a=>z=>a.includes(z);
+const cats=[[G([3,11,19,37,55,87]),"#d6523a"],[G([4,12,20,38,56,88]),"#d98a2b"],[G([9,17,35,53,85,117]),"#b8497f"],[G([2,10,18,36,54,86,118]),"#7a5bd0"],[G([1,6,7,8,15,16,34]),"#2f9e6a"],[G([5,14,32,33,51,52]),"#6f8f2a"],[G([13,31,49,50,81,82,83,84,113,114,115,116]),"#3a8f9e"],[z=>z>=57&&z<=71,"#a2578f"],[z=>z>=89&&z<=103,"#8a4a6a"]];
+const col=z=>(cats.find(c=>c[0](z))||[0,"#3d6fd0"])[1];
+function pos(z){
+ if(z==1)return[1,1];if(z==2)return[1,18];
+ if(z<=4)return[2,z-2];if(z<=10)return[2,z+8];
+ if(z<=12)return[3,z-10];if(z<=18)return[3,z];
+ if(z<=36)return[4,z-18];if(z<=54)return[5,z-36];
+ if(z<=56)return[6,z-54];if(z<=71)return[9,z-54];
+ if(z<=86)return[6,z-68];if(z<=88)return[7,z-86];
+ if(z<=103)return[10,z-86];return[7,z-100];
+}
+const pt=$('pt');
+S.forEach((s,i)=>{const z=i+1,[r,c]=pos(z),d=document.createElement('div');d.className='el';d.dataset.z=z;d.style.gridRow=r;d.style.gridColumn=c;d.style.background=col(z);d.innerHTML=`<b>${s}</b><small>${N[i]}</small>`;pt.appendChild(d)});
+
+/* ---- reactions ---- */
+const sub=s=>s.replace(/\d/g,d=>"₀₁₂₃₄₅₆₇₈₉"[d]);
+const parse=f=>[...f.matchAll(/([A-Z][a-z]?)(\d*)/g)].map(m=>[m[1],+(m[2]||1)]);
+const fm=c=>c.map(([s,n])=>s+(n>1?n:"")).join("");
+const REC=[["O3","臭氧","三個氧原子結合成臭氧,有特殊氣味,能吸收紫外線"],["H2O","水","氫在氧中燃燒生成水,是生命不可或缺的分子"],["H2O2","過氧化氫(雙氧水)","比水多一個氧,常用來消毒與漂白"],["CO2","二氧化碳","碳完全燃燒的產物,也是光合作用的原料"],["CO","一氧化碳","碳不完全燃燒產生的有毒氣體"],["CH4","甲烷","最簡單的碳氫化合物,天然氣的主要成分"],["C2H6O","乙醇","酒精的主要成分"],["C6H12O6","葡萄糖","生物體最重要的能量來源之一"],["NH3","氨","有刺鼻氣味,是肥料的重要原料"],["NO2","二氧化氮","棕紅色有毒氣體,常見於汽機車廢氣"],["HNO3","硝酸","強酸,具有強氧化性"],["SO2","二氧化硫","硫燃燒生成,有刺激性氣味"],["H2SO4","硫酸","工業之母,強酸,腐蝕性極強"],["H2S","硫化氫","有臭雞蛋味的氣體"],["HCl","氯化氫","溶於水就是鹽酸"],["HF","氟化氫","溶於水為氫氟酸,能腐蝕玻璃"],["SiO2","二氧化矽","石英與沙子的主要成分"],["CaCO3","碳酸鈣","石灰岩、大理石與貝殼的主要成分"]].map(r=>({f:r[0],n:r[1],d:r[2],c:parse(r[0])})).sort((a,b)=>b.c.reduce((x,y)=>x+y[1],0)-a.c.reduce((x,y)=>x+y[1],0));
+const ALK=["Li","Na","K","Rb","Cs"],CAT={Li:1,Na:1,K:1,Rb:1,Cs:1,Ag:1,Be:2,Mg:2,Ca:2,Sr:2,Ba:2,Zn:2,Cu:2,Fe:3,Al:3,Ga:3},ANI={F:1,Cl:1,Br:1,I:1,O:2,S:2,N:3},DI=["H","N","O","F","Cl","Br","I"];
+const BOOM=[...ALK,"Mg","Ca","Sr","Ba"];
+const gcd=(a,b)=>b?gcd(b,a%b):a;
+const zOf=s=>S.indexOf(s)+1;
+function step(c){
+ for(const k of ALK){const m=Math.min(c[k]||0,c.H||0,c.O||0);if(m>0){c[k]-=m;c.H-=m;c.O-=m;return{m,f:k+"OH",n:"氫氧化"+N[zOf(k)-1],d:"活潑的鹼金屬遇水猛烈反應,放熱、冒氣並可能爆炸",c:[[k,1],["O",1],["H",1]],boom:1}}}
+ for(const r of REC){const m=Math.min(...r.c.map(([s,n])=>Math.floor((c[s]||0)/n)));if(m>0){r.c.forEach(([s,n])=>c[s]-=n*m);return{m,f:r.f,n:r.n,d:r.d,c:r.c}}}
+ for(const a in ANI)if(c[a]>0)for(const k in CAT)if(c[k]>0){const va=ANI[a],vc=CAT[k],g=gcd(va,vc),nk=va/g,na=vc/g,m=Math.min(Math.floor(c[k]/nk),Math.floor(c[a]/na));if(m>0){c[k]-=nk*m;c[a]-=na*m;const p=[[k,nk],[a,na]];const pre=a=="O"?"氧":N[zOf(a)-1];return{m,f:fm(p),n:pre+"化"+N[zOf(k)-1],d:"金屬與非金屬透過電子轉移結合成離子化合物",c:p,boom:BOOM.includes(k)}}}
+ for(const s of DI)if(c[s]>=2){const m=Math.floor(c[s]/2);c[s]-=2*m;return{m,f:s+"2",n:N[zOf(s)-1]+"分子",d:"兩個原子共用電子,形成穩定的雙原子分子",c:[[s,2]]}}
+ return null}
+function calc(c0){
+ const c={...c0},mols=[],seen={};let boom=0,rad=0,msg=[];let p;
+ while(p=step(c)){boom|=!!p.boom;seen[p.f]=seen[p.f]||{p,k:0};seen[p.f].k+=p.m;for(let i=0;i<p.m;i++)mols.push({comp:p.c,f:p.f})}
+ for(const s in c)if(c[s]>0){const z=zOf(s);
+  if(s=="U"||s=="Pu"){boom=1;msg.push(`<b>${N[z-1]}</b>發生核分裂!原子核分裂並釋放巨大能量,這是核電廠與核彈的原理`)}
+  else if(z>=84||z==43||z==61){rad=1;msg.push(`<b>${N[z-1]}</b>具有放射性,會自行衰變並釋放輻射`)}
+  else if([2,10,18,36,54,86,118].includes(z))msg.push(`<b>${N[z-1]}</b>是惰性氣體,幾乎不與其他元素反應`)}
+ const lines=Object.values(seen).map(({p,k})=>`<b>${sub(p.f)}</b> ${p.n} ×${k}:${p.d}`);
+ if(boom&&lines.length)lines.push("⚠️ 反應十分劇烈!");
+ if(!mols.length&&!msg.length)msg.push("這些元素之間沒有發生反應(或這個反應還沒收錄)");
+ return{mols,boom,rad,html:[...lines,...msg].join("<br>")}}
+
+/* ---- audio ---- */
+let AC,mute=false;
+const au=()=>{try{AC=AC||new(window.AudioContext||window.webkitAudioContext)();if(AC.state=="suspended")AC.resume()}catch(e){}return AC};
+function tone(f,d,type="sine",v=.15,f2,delay=0){const a=au();if(!a||mute)return;const o=a.createOscillator(),g=a.createGain(),t=a.currentTime+delay;o.type=type;o.frequency.setValueAtTime(f,t);if(f2)o.frequency.exponentialRampToValueAtTime(f2,t+d);g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+d);o.connect(g);g.connect(a.destination);o.start(t);o.stop(t+d+.02)}
+function noise(d,v=.3,fr=800){const a=au();if(!a||mute)return;const n=a.sampleRate*d|0,b=a.createBuffer(1,n,a.sampleRate),x=b.getChannelData(0);for(let i=0;i<n;i++)x[i]=(Math.random()*2-1)*(1-i/n);const s=a.createBufferSource(),f=a.createBiquadFilter(),g=a.createGain();s.buffer=b;f.type="lowpass";f.frequency.setValueAtTime(fr,a.currentTime);f.frequency.exponentialRampToValueAtTime(80,a.currentTime+d);g.gain.value=v;s.connect(f);f.connect(g);g.connect(a.destination);s.start()}
+function heatSnd(){tone(110,1.1,"sawtooth",.05,420);noise(1.1,.08,1500)}
+function boomSnd(){if(res.boom){noise(1.4,.7,3500);tone(110,1,"sine",.5,28);tone(60,.6,"square",.1,25)}else if(!mols.length)tone(180,.4,"sine",.1,120);else{[523,659,784,1047].forEach((f,i)=>tone(f,.5,"sine",.12,0,i*.07));noise(.25,.15,6000)}}
+$('mu').onclick=()=>{mute=!mute;$('mu').textContent=mute?"🔇":"🔊"};
+/* ---- reactor ---- */
+const cv=$('cv'),ctx=cv.getContext('2d');let W,H,dpr;
+function rs(){dpr=devicePixelRatio||1;W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr}
+rs();addEventListener('resize',rs);
+let lt=0,pops=[],bg=Array.from({length:30},()=>({x:Math.random(),y:Math.random(),s:Math.random()*1.5+.5,v:Math.random()*.0004+.0001})),atoms=[],mols=[],parts=[],ph=0,t0=0,res=null,flash=0,shake=0,rings=[],last=0,fc=0;
+const say=t=>$('st').textContent=t,MAX=24;
+function chips(){const c={};atoms.forEach(a=>c[a.s]=(c[a.s]||0)+1);$('chips').innerHTML="";Object.keys(c).forEach(s=>{const e=document.createElement('span');e.className='chip';e.textContent=`${s} ×${c[s]} ✕`;e.onclick=()=>{if(ph)back();const i=atoms.map(a=>a.s).lastIndexOf(s);atoms.splice(i,1);chips()};$('chips').appendChild(e)});$('go').disabled=!atoms.length}
+function back(){ph=0;mols=[];res=null;rings=[];$('info').innerHTML="";$('go').textContent="🔥 反應";atoms.forEach(a=>{a.tx=null;a.rt=a.r;a.vx=(Math.random()-.5)*6;a.vy=-3})}
+function add(z){tone(260+z*6,.18,"sine",.12,520+z*6);if(ph)back();if(atoms.length>=MAX){say("反應爐已滿(最多 24 個原子)");return}
+ const r=12+Math.min(z,86)/10;atoms.push({z,s:S[z-1],x:W*(.15+.7*Math.random()),y:r,vx:(Math.random()-.5)*4,vy:2,r,rt:r,dr:r,col:col(z)});chips();say(`${N[z-1]} ${S[z-1]}(原子序 ${z})`)}
+let dragT=0;
+pt.addEventListener('click',e=>{const el=e.target.closest('.el');if(el&&performance.now()-dragT>80)add(+el.dataset.z)});
+pt.addEventListener('pointerdown',e=>{const el=e.target.closest('.el');if(!el||e.pointerType!="mouse")return;const z=+el.dataset.z;let moved=0;const sx=e.clientX,sy=e.clientY;const g=document.createElement('div');g.className='ghost';g.textContent=S[z-1];g.style.display='none';document.body.appendChild(g);
+ const mv=v=>{if(!moved&&Math.hypot(v.clientX-sx,v.clientY-sy)<8)return;moved=1;g.style.display='flex';g.style.left=v.clientX+'px';g.style.top=v.clientY+'px'};
+ const up=v=>{removeEventListener('pointermove',mv);removeEventListener('pointerup',up);g.remove();if(moved){dragT=performance.now();const b=cv.getBoundingClientRect();if(v.clientX>b.left&&v.clientX<b.right&&v.clientY>b.top&&v.clientY<b.bottom)add(z)}};
+ addEventListener('pointermove',mv);addEventListener('pointerup',up)});
+$('clr').onclick=()=>{atoms=[];back();chips();say("")};
+$('go').onclick=()=>{if(ph){back();return}if(!atoms.length)return;
+ const c={};atoms.forEach(a=>c[a.s]=(c[a.s]||0)+1);res=calc(c);
+ const pool={};atoms.forEach(a=>{(pool[a.s]=pool[a.s]||[]).push(a)});
+ mols=res.mols.map(m=>({m,as:m.comp.flatMap(([s,n])=>Array.from({length:n},()=>pool[s].pop()))}));
+ layout();ph=1;t0=performance.now();$('go').textContent="↺ 還原";say("加熱反應中…");heatSnd()};
+const PRI=["C","Si","S","N","O","P"];
+function layout(){const M=mols.length;if(!M)return;const cols=M<=3?M:M<=8?4:6,rows=Math.ceil(M/cols),cw=W/cols,ch=(H-24)/rows;
+ mols.forEach((o,i)=>{const cx=cw*(i%cols+.5),cy=ch*(Math.floor(i/cols)+.5),as=o.as,n=as.length,r=as.reduce((x,a)=>x+a.r,0)/n;
+  const cnt={};as.forEach(a=>cnt[a.s]=(cnt[a.s]||0)+1);
+  let ci=-1;if(n>=3){const u=as.map((a,j)=>j).filter(j=>cnt[as[j].s]==1&&as[j].s!="H");u.sort((a,b)=>{const pa=PRI.indexOf(as[a].s),pb=PRI.indexOf(as[b].s);return(pa<0?9:pa)-(pb<0?9:pb)||as[b].z-as[a].z});if(u.length)ci=u[0]}
+  const k=ci>=0?n-1:n,rho=n==2?r*1.1:Math.max(r*2.2,k*r*2.1/(2*Math.PI)),sc=Math.min(1,Math.min(cw,ch)*.4/(rho+r)),ord=[];
+  as.forEach((a,j)=>{if(j==ci){a.tx=cx;a.ty=cy}else ord.push(a)});
+  ord.forEach((a,j)=>{const ang=n==2?(j?0:Math.PI):j/k*2*Math.PI-Math.PI/2;a.tx=cx+Math.cos(ang)*rho*sc;a.ty=cy+Math.sin(ang)*rho*sc});
+  as.forEach(a=>a.rt=a.r*sc);o.ci=ci;o.cx=cx;o.ly=cy+(rho+r)*sc+13})}
+function burst(){ph=3;boomSnd();say("反应完成".replace("反应","反應"));$('info').innerHTML=res.html;
+ flash=res.boom?1:.5;shake=res.boom?14:0;
+ const mk=(x,y,n,c,sp)=>{for(let i=0;i<n;i++){const a=Math.random()*6.28,v=Math.random()*sp;parts.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,l:1,c})}};
+ if(mols.length){const nm=[...new Set(mols.map(o=>sub(o.m.f)))].join(" + ");pops.push({x:W/2,y:H*.45,t:(res.boom?"💥 ":"✨ ")+nm,l:1});mols.forEach(o=>{const cs=o.as.map(a=>a.col);rings.push({x:o.cx,y:o.cy,r:5,v:res.boom?8:5,c:res.boom?"#ffb347":"#7fd4ff"},{x:o.cx,y:o.cy,r:5,v:res.boom?4:3,c:"#ffffff"});for(let i=0;i<(res.boom?60:28);i++){const a=Math.random()*6.28,v=Math.random()*(res.boom?11:6);parts.push({x:o.cx,y:o.cy,vx:Math.cos(a)*v,vy:Math.sin(a)*v,l:1,c:i%3?cs[i%cs.length]:"#fff"})}})}
+ else if(res.boom){rings.push({x:W/2,y:H/2,r:5,c:"#fff3a0"});mk(W/2,H/2,70,"#ffd27f",12);atoms.forEach(a=>{a.vx=(a.x-W/2)*.12+(Math.random()-.5)*8;a.vy=(a.y-H/2)*.12-4})}}
+function tick(now){const dt=Math.min(2,(now-last)/16.7||1);last=now;const el=ph?(now-t0)/1000:0;
+ if(ph==1&&el>1.1){ph=2;tone(300,.8,"triangle",.1,1400)}if(ph==2&&el>1.9)burst();
+ atoms.forEach(a=>{
+  if(ph==1){a.vx+=(Math.random()-.5)*2.2*dt;a.vy+=(Math.random()-.5)*2.2*dt;const v=Math.hypot(a.vx,a.vy);if(v>10){a.vx*=10/v;a.vy*=10/v}}
+  else if(a.tx!=null&&ph>=2){const k=ph==2?.13:.3;a.x+=(a.tx-a.x)*k*dt;a.y+=(a.ty-a.y)*k*dt;a.dr+=(a.rt-a.dr)*.15*dt;return}
+  else a.vy+=.35*dt;
+  a.x+=a.vx*dt;a.y+=a.vy*dt;a.dr+=(a.rt-a.dr)*.15*dt;
+  if(a.x<a.r){a.x=a.r;a.vx=Math.abs(a.vx)*.8}if(a.x>W-a.r){a.x=W-a.r;a.vx=-Math.abs(a.vx)*.8}
+  if(a.y<a.r){a.y=a.r;a.vy=Math.abs(a.vy)*.8}if(a.y>H-a.r){a.y=H-a.r;a.vy=-Math.abs(a.vy)*.55;a.vx*=.97}
+ });
+ for(let i=0;i<atoms.length;i++)for(let j=i+1;j<atoms.length;j++){const a=atoms[i],b=atoms[j];if((a.tx!=null&&ph>=2)||(b.tx!=null&&ph>=2))continue;const dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy)||.1,m=a.r+b.r;if(d<m){const nx=dx/d,ny=dy/d,p=(m-d)/2;a.x-=nx*p;a.y-=ny*p;b.x+=nx*p;b.y+=ny*p;const rv=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny;if(rv<0){if(rv<-5&&now-lt>70){tone(700+Math.random()*500,.05,"triangle",.03);lt=now}a.vx+=rv*nx*.8;a.vy+=rv*ny*.8;b.vx-=rv*nx*.8;b.vy-=rv*ny*.8}}}
+ if(ph==3&&res.rad&&(++fc%4==0))atoms.forEach(a=>{if(zOf(a.s)>=84||a.z==43||a.z==61){const g=Math.random()*6.28;parts.push({x:a.x,y:a.y,vx:Math.cos(g)*3,vy:Math.sin(g)*3,l:1,c:"#7dff7d"});tone(1800+Math.random()*1500,.02,"square",.03)}});
+ parts.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=.12*dt;p.l-=.02*dt});parts=parts.filter(p=>p.l>0);
+ rings.forEach(r=>{r.r+=(r.v||5)*dt});pops.forEach(p=>{p.y-=.5*dt;p.l-=.008*dt});pops=pops.filter(p=>p.l>0);rings=rings.filter(r=>r.r<Math.max(W,H)*.6);
+ flash*=Math.pow(.92,dt);shake*=Math.pow(.9,dt);
+ draw(el);requestAnimationFrame(tick)}
+function draw(el){ctx.setTransform(dpr,0,0,dpr,0,0);ctx.fillStyle=ph==1||ph==2?"rgba(7,11,24,.2)":"#070b18";ctx.fillRect(0,0,W,H);bg.forEach(b=>{b.y-=b.v*16;if(b.y<0){b.y=1;b.x=Math.random()}ctx.fillStyle="rgba(150,180,255,.25)";ctx.beginPath();ctx.arc(b.x*W,b.y*H,b.s,0,6.283);ctx.fill()});
+ ctx.save();if(shake>.3)ctx.translate((Math.random()-.5)*shake,(Math.random()-.5)*shake);
+ const heat=ph==1?Math.min(1,el):ph==2?1:0;
+ const g=ctx.createRadialGradient(W/2,H,10,W/2,H,H);g.addColorStop(0,`rgba(255,110,40,${.35*heat+.06})`);g.addColorStop(1,"rgba(255,110,40,0)");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+ if(ph==3&&mols.length){const al=Math.min(1,(el-1.9)*2);mols.forEach(o=>{const gg=ctx.createRadialGradient(o.cx,o.cy,0,o.cx,o.cy,60+8*Math.sin(el*5));gg.addColorStop(0,res.boom?"rgba(255,170,60,.35)":"rgba(120,200,255,.3)");gg.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=gg;ctx.fillRect(o.cx-80,o.cy-80,160,160)});ctx.strokeStyle=`rgba(255,255,255,${.7*al})`;ctx.lineWidth=3;mols.forEach(o=>{const as=o.as,n=as.length;ctx.beginPath();if(o.ci>=0){const c=as[o.ci];as.forEach(a=>{if(a!==c){ctx.moveTo(c.tx,c.ty);ctx.lineTo(a.tx,a.ty)}})}else if(n==2){ctx.moveTo(as[0].tx,as[0].ty);ctx.lineTo(as[1].tx,as[1].ty)}else{as.forEach((a,j)=>{const b=as[(j+1)%n];ctx.moveTo(a.tx,a.ty);ctx.lineTo(b.tx,b.ty)})}ctx.stroke()})}
+ atoms.forEach(a=>{const r=a.dr;ctx.save();ctx.shadowColor=heat?"#ff8a3a":a.col;ctx.shadowBlur=heat?14*heat+6:10;
+  ctx.beginPath();ctx.arc(a.x,a.y,r,0,6.283);ctx.fillStyle=heat?mix(a.col,heat*.45):a.col;ctx.fill();ctx.restore();
+  ctx.lineWidth=2;ctx.strokeStyle="rgba(255,255,255,.55)";ctx.stroke();
+  ctx.fillStyle="#fff";ctx.font=`700 ${Math.max(7,r*.95)}px system-ui`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(a.s,a.x,a.y+1);const T=performance.now()/500;ctx.save();ctx.fillStyle="#fff";ctx.globalAlpha=.8;for(let k=0;k<3;k++){const an=T*(1+k*.4)+k*2.1,rr=r+5+k*2;ctx.beginPath();ctx.arc(a.x+Math.cos(an)*rr,a.y+Math.sin(an)*rr*(k?.55:1),1.6,0,6.283);ctx.fill()}ctx.restore()});
+ if(ph==3&&mols.length&&mols.length<=6){ctx.fillStyle="#ffd9a0";ctx.font="700 14px system-ui";ctx.textAlign="center";mols.forEach(o=>ctx.fillText(sub(o.m.f),o.cx,Math.min(H-8,o.ly)))}
+ ctx.globalCompositeOperation="lighter";
+ parts.forEach(p=>{ctx.globalAlpha=Math.max(0,p.l);ctx.fillStyle=p.c;ctx.beginPath();ctx.arc(p.x,p.y,2.5,0,6.283);ctx.fill()});
+ rings.forEach(r=>{ctx.globalAlpha=Math.max(0,1-r.r/(Math.max(W,H)*.6));ctx.strokeStyle=r.c;ctx.lineWidth=4;ctx.beginPath();ctx.arc(r.x,r.y,r.r,0,6.283);ctx.stroke()});
+ ctx.globalAlpha=1;ctx.restore();ctx.globalCompositeOperation="source-over";
+ pops.forEach(p=>{ctx.globalAlpha=Math.min(1,p.l*1.5);ctx.fillStyle="#fff";ctx.font="700 22px system-ui";ctx.textAlign="center";ctx.shadowColor="#ffb347";ctx.shadowBlur=12;ctx.fillText(p.t,p.x,p.y);ctx.shadowBlur=0});ctx.globalAlpha=1;
+ if(flash>.02){ctx.fillStyle=`rgba(255,240,200,${flash*.8})`;ctx.fillRect(0,0,W,H)}
+ if(!atoms.length){ctx.fillStyle="#4a5688";ctx.font="14px system-ui";ctx.textAlign="center";ctx.fillText("反應爐是空的,點選上方元素吧",W/2,H/2)}}
+function mix(hex,t){const n=parseInt(hex.slice(1),16),r=n>>16,g=n>>8&255,b=n&255;return`rgb(${r+(255-r)*t|0},${g+(150-g)*t|0},${b+(60-b)*t|0})`}
+requestAnimationFrame(tick);
+</script></body></html>
