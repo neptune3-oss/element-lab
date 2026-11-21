@@ -19,7 +19,7 @@ h1{font-size:18px;margin:10px 12px 2px}
 #cv{width:100%;height:300px;display:block;border-radius:12px;background:#070b18}
 #chips{min-height:30px;margin:8px 0 4px;display:flex;flex-wrap:wrap;gap:6px}
 .chip{background:#232c52;border-radius:14px;padding:4px 10px;font-size:13px}
-.bar{display:flex;gap:8px;margin:6px 0}
+.bar{display:flex;gap:8px;margin:6px 0}#gm{margin-bottom:8px}#gt{display:flex;gap:10px;align-items:flex-start;background:#1c2547;border-radius:12px;padding:10px}#av{font-size:34px}#bub{font-size:14px;line-height:1.6;flex:1}#sc{font-size:12px;color:#ffb86b;margin:6px 2px 0;min-height:14px}.hl{outline:3px solid #ffd54a;outline-offset:-1px;animation:pl .6s infinite alternate;position:relative;z-index:2}@keyframes pl{to{outline-offset:3px;filter:brightness(1.6)}}
 button{flex:1;font:inherit;font-size:16px;font-weight:700;border:0;border-radius:12px;padding:12px;color:#fff;background:#e0653a}
 button.g{background:#2d3865;flex:.5}
 button:disabled{opacity:.4}
@@ -31,6 +31,7 @@ button:disabled{opacity:.4}
 <p class="sub">點一下元素丟進反應爐(電腦可用滑鼠拖曳),再按「反應」</p>
 <div id="tw"><div id="pt"></div></div>
 <div id="rx">
+<div id="gm"><div id="gt"><span id="av">👩‍🏫</span><div id="bub">想挑戰看看嗎？老師會出 10 題，每題 10 分，答對才拿分喔！</div></div><div id="sc"></div><div class="bar"><button id="gs">🎓 開始挑戰</button></div></div>
 <canvas id="cv"></canvas>
 <div id="chips"></div>
 <div class="bar"><button id="go" disabled>🔥 反應</button><button id="clr" class="g">清空</button><button id="mu" class="g" style="flex:.2">🔊</button></div>
@@ -92,11 +93,11 @@ function boomSnd(){if(res.boom){noise(1.4,.7,3500);tone(110,1,"sine",.5,28);tone
 $('mu').onclick=()=>{mute=!mute;$('mu').textContent=mute?"🔇":"🔊"};
 /* ---- reactor ---- */
 const cv=$('cv'),ctx=cv.getContext('2d');let W,H,dpr;
-function rs(){dpr=devicePixelRatio||1;W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr}
+function rs(){dpr=Math.min(2,devicePixelRatio||1);W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr}
 rs();addEventListener('resize',rs);
 let lt=0,pops=[],bg=Array.from({length:30},()=>({x:Math.random(),y:Math.random(),s:Math.random()*1.5+.5,v:Math.random()*.0004+.0001})),atoms=[],mols=[],parts=[],ph=0,t0=0,res=null,flash=0,shake=0,rings=[],last=0,fc=0;
 const say=t=>$('st').textContent=t,MAX=24;
-function chips(){const c={};atoms.forEach(a=>c[a.s]=(c[a.s]||0)+1);$('chips').innerHTML="";Object.keys(c).forEach(s=>{const e=document.createElement('span');e.className='chip';e.textContent=`${s} ×${c[s]} ✕`;e.onclick=()=>{if(ph)back();const i=atoms.map(a=>a.s).lastIndexOf(s);atoms.splice(i,1);chips()};$('chips').appendChild(e)});$('go').disabled=!atoms.length}
+function chips(){const c={};atoms.forEach(a=>c[a.s]=(c[a.s]||0)+1);$('chips').innerHTML="";Object.keys(c).forEach(s=>{const e=document.createElement('span');e.className='chip';e.textContent=`${s} ×${c[s]} ✕`;e.onclick=()=>{if(ph)back();const i=atoms.map(a=>a.s).lastIndexOf(s);atoms.splice(i,1);chips()};$('chips').appendChild(e)});$('go').disabled=!atoms.length;tutChk()}
 function back(){ph=0;mols=[];res=null;rings=[];$('info').innerHTML="";$('go').textContent="🔥 反應";atoms.forEach(a=>{a.tx=null;a.rt=a.r;a.vx=(Math.random()-.5)*6;a.vy=-3})}
 function add(z){tone(260+z*6,.18,"sine",.12,520+z*6);if(ph)back();if(atoms.length>=MAX){say("反應爐已滿(最多 24 個原子)");return}
  const r=12+Math.min(z,86)/10;atoms.push({z,s:S[z-1],x:W*(.15+.7*Math.random()),y:r,vx:(Math.random()-.5)*4,vy:2,r,rt:r,dr:r,col:col(z)});chips();say(`${N[z-1]} ${S[z-1]}(原子序 ${z})`)}
@@ -120,11 +121,11 @@ function layout(){const M=mols.length;if(!M)return;const cols=M<=3?M:M<=8?4:6,ro
   const k=ci>=0?n-1:n,rho=n==2?r*1.1:Math.max(r*2.2,k*r*2.1/(2*Math.PI)),sc=Math.min(1,Math.min(cw,ch)*.4/(rho+r)),ord=[];
   as.forEach((a,j)=>{if(j==ci){a.tx=cx;a.ty=cy}else ord.push(a)});
   ord.forEach((a,j)=>{const ang=n==2?(j?0:Math.PI):j/k*2*Math.PI-Math.PI/2;a.tx=cx+Math.cos(ang)*rho*sc;a.ty=cy+Math.sin(ang)*rho*sc});
-  as.forEach(a=>a.rt=a.r*sc);o.ci=ci;o.cx=cx;o.ly=cy+(rho+r)*sc+13})}
-function burst(){ph=3;boomSnd();say("反应完成".replace("反应","反應"));$('info').innerHTML=res.html;
+  as.forEach(a=>a.rt=a.r*sc);o.ci=ci;o.cx=cx;o.cy=cy;o.ly=cy+(rho+r)*sc+13})}
+function burst(){ph=3;boomSnd();setTimeout(()=>{if(gm.on&&ph==3){if(gm.tu==3)tutEnd();else if(!gm.w)judge()}},900);say("反应完成".replace("反应","反應"));$('info').innerHTML=res.html;
  flash=res.boom?1:.5;shake=res.boom?14:0;
  const mk=(x,y,n,c,sp)=>{for(let i=0;i<n;i++){const a=Math.random()*6.28,v=Math.random()*sp;parts.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,l:1,c})}};
- if(mols.length){const nm=[...new Set(mols.map(o=>sub(o.m.f)))].join(" + ");pops.push({x:W/2,y:H*.45,t:(res.boom?"💥 ":"✨ ")+nm,l:1});mols.forEach(o=>{const cs=o.as.map(a=>a.col);rings.push({x:o.cx,y:o.cy,r:5,v:res.boom?8:5,c:res.boom?"#ffb347":"#7fd4ff"},{x:o.cx,y:o.cy,r:5,v:res.boom?4:3,c:"#ffffff"});for(let i=0;i<(res.boom?60:28);i++){const a=Math.random()*6.28,v=Math.random()*(res.boom?11:6);parts.push({x:o.cx,y:o.cy,vx:Math.cos(a)*v,vy:Math.sin(a)*v,l:1,c:i%3?cs[i%cs.length]:"#fff"})}})}
+ if(mols.length){const nm=[...new Set(mols.map(o=>sub(o.m.f)))].join(" + ");pops.push({x:W/2,y:H*.45,t:(res.boom?"💥 ":"✨ ")+nm,l:1});mols.forEach(o=>{const cs=o.as.map(a=>a.col);if(mols.length<=6)rings.push({x:o.cx,y:o.cy,r:5,v:res.boom?8:5,c:res.boom?"#ffb347":"#7fd4ff"},{x:o.cx,y:o.cy,r:5,v:res.boom?4:3,c:"#ffffff"});for(let i=0,nn=Math.ceil((res.boom?70:30)/mols.length);i<nn;i++){const a=Math.random()*6.28,v=Math.random()*(res.boom?11:6);parts.push({x:o.cx,y:o.cy,vx:Math.cos(a)*v,vy:Math.sin(a)*v,l:1,c:i%3?cs[i%cs.length]:"#fff"})}})}
  else if(res.boom){rings.push({x:W/2,y:H/2,r:5,c:"#fff3a0"});mk(W/2,H/2,70,"#ffd27f",12);atoms.forEach(a=>{a.vx=(a.x-W/2)*.12+(Math.random()-.5)*8;a.vy=(a.y-H/2)*.12-4})}}
 function tick(now){const dt=Math.min(2,(now-last)/16.7||1);last=now;const el=ph?(now-t0)/1000:0;
  if(ph==1&&el>1.1){ph=2;tone(300,.8,"triangle",.1,1400)}if(ph==2&&el>1.9)burst();
@@ -137,17 +138,17 @@ function tick(now){const dt=Math.min(2,(now-last)/16.7||1);last=now;const el=ph?
   if(a.y<a.r){a.y=a.r;a.vy=Math.abs(a.vy)*.8}if(a.y>H-a.r){a.y=H-a.r;a.vy=-Math.abs(a.vy)*.55;a.vx*=.97}
  });
  for(let i=0;i<atoms.length;i++)for(let j=i+1;j<atoms.length;j++){const a=atoms[i],b=atoms[j];if((a.tx!=null&&ph>=2)||(b.tx!=null&&ph>=2))continue;const dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy)||.1,m=a.r+b.r;if(d<m){const nx=dx/d,ny=dy/d,p=(m-d)/2;a.x-=nx*p;a.y-=ny*p;b.x+=nx*p;b.y+=ny*p;const rv=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny;if(rv<0){if(rv<-5&&now-lt>70){tone(700+Math.random()*500,.05,"triangle",.03);lt=now}a.vx+=rv*nx*.8;a.vy+=rv*ny*.8;b.vx-=rv*nx*.8;b.vy-=rv*ny*.8}}}
- if(ph==3&&res.rad&&(++fc%4==0))atoms.forEach(a=>{if(zOf(a.s)>=84||a.z==43||a.z==61){const g=Math.random()*6.28;parts.push({x:a.x,y:a.y,vx:Math.cos(g)*3,vy:Math.sin(g)*3,l:1,c:"#7dff7d"});tone(1800+Math.random()*1500,.02,"square",.03)}});
- parts.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=.12*dt;p.l-=.02*dt});parts=parts.filter(p=>p.l>0);
+ if(ph==3&&res.rad&&(++fc%4==0))atoms.forEach(a=>{if(zOf(a.s)>=84||a.z==43||a.z==61){const g=Math.random()*6.28;parts.push({x:a.x,y:a.y,vx:Math.cos(g)*3,vy:Math.sin(g)*3,l:1,c:"#7dff7d"});if(now-lt>90){tone(1800+Math.random()*1500,.02,"square",.03);lt=now}}});
+ parts.forEach(p=>{p.x+=p.vx*dt;p.y+=p.vy*dt;p.vy+=.12*dt;p.l-=.02*dt});parts=parts.filter(p=>p.l>0);if(parts.length>300)parts.splice(0,parts.length-300);
  rings.forEach(r=>{r.r+=(r.v||5)*dt});pops.forEach(p=>{p.y-=.5*dt;p.l-=.008*dt});pops=pops.filter(p=>p.l>0);rings=rings.filter(r=>r.r<Math.max(W,H)*.6);
  flash*=Math.pow(.92,dt);shake*=Math.pow(.9,dt);
- draw(el);requestAnimationFrame(tick)}
+ try{draw(el)}catch(e){console.error(e)}requestAnimationFrame(tick)}
 function draw(el){ctx.setTransform(dpr,0,0,dpr,0,0);ctx.fillStyle=ph==1||ph==2?"rgba(7,11,24,.2)":"#070b18";ctx.fillRect(0,0,W,H);bg.forEach(b=>{b.y-=b.v*16;if(b.y<0){b.y=1;b.x=Math.random()}ctx.fillStyle="rgba(150,180,255,.25)";ctx.beginPath();ctx.arc(b.x*W,b.y*H,b.s,0,6.283);ctx.fill()});
  ctx.save();if(shake>.3)ctx.translate((Math.random()-.5)*shake,(Math.random()-.5)*shake);
  const heat=ph==1?Math.min(1,el):ph==2?1:0;
  const g=ctx.createRadialGradient(W/2,H,10,W/2,H,H);g.addColorStop(0,`rgba(255,110,40,${.35*heat+.06})`);g.addColorStop(1,"rgba(255,110,40,0)");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
- if(ph==3&&mols.length){const al=Math.min(1,(el-1.9)*2);mols.forEach(o=>{const gg=ctx.createRadialGradient(o.cx,o.cy,0,o.cx,o.cy,60+8*Math.sin(el*5));gg.addColorStop(0,res.boom?"rgba(255,170,60,.35)":"rgba(120,200,255,.3)");gg.addColorStop(1,"rgba(0,0,0,0)");ctx.fillStyle=gg;ctx.fillRect(o.cx-80,o.cy-80,160,160)});ctx.strokeStyle=`rgba(255,255,255,${.7*al})`;ctx.lineWidth=3;mols.forEach(o=>{const as=o.as,n=as.length;ctx.beginPath();if(o.ci>=0){const c=as[o.ci];as.forEach(a=>{if(a!==c){ctx.moveTo(c.tx,c.ty);ctx.lineTo(a.tx,a.ty)}})}else if(n==2){ctx.moveTo(as[0].tx,as[0].ty);ctx.lineTo(as[1].tx,as[1].ty)}else{as.forEach((a,j)=>{const b=as[(j+1)%n];ctx.moveTo(a.tx,a.ty);ctx.lineTo(b.tx,b.ty)})}ctx.stroke()})}
- atoms.forEach(a=>{const r=a.dr;ctx.save();ctx.shadowColor=heat?"#ff8a3a":a.col;ctx.shadowBlur=heat?14*heat+6:10;
+ if(ph==3&&mols.length){const al=Math.min(1,(el-1.9)*2);mols.forEach(o=>{ctx.fillStyle=res.boom?"rgba(255,170,60,.18)":"rgba(120,200,255,.15)";ctx.beginPath();ctx.arc(o.cx,o.cy,40+6*Math.sin(el*5),0,6.283);ctx.fill()});ctx.strokeStyle=`rgba(255,255,255,${.7*al})`;ctx.lineWidth=3;mols.forEach(o=>{const as=o.as,n=as.length;ctx.beginPath();if(o.ci>=0){const c=as[o.ci];as.forEach(a=>{if(a!==c){ctx.moveTo(c.tx,c.ty);ctx.lineTo(a.tx,a.ty)}})}else if(n==2){ctx.moveTo(as[0].tx,as[0].ty);ctx.lineTo(as[1].tx,as[1].ty)}else{as.forEach((a,j)=>{const b=as[(j+1)%n];ctx.moveTo(a.tx,a.ty);ctx.lineTo(b.tx,b.ty)})}ctx.stroke()})}
+ atoms.forEach(a=>{const r=a.dr;ctx.save();ctx.globalAlpha=heat?.3*heat+.12:.12;ctx.fillStyle=heat?"#ff8a3a":a.col;ctx.beginPath();ctx.arc(a.x,a.y,r*1.6,0,6.283);ctx.fill();ctx.globalAlpha=1;
   ctx.beginPath();ctx.arc(a.x,a.y,r,0,6.283);ctx.fillStyle=heat?mix(a.col,heat*.45):a.col;ctx.fill();ctx.restore();
   ctx.lineWidth=2;ctx.strokeStyle="rgba(255,255,255,.55)";ctx.stroke();
   ctx.fillStyle="#fff";ctx.font=`700 ${Math.max(7,r*.95)}px system-ui`;ctx.textAlign="center";ctx.textBaseline="middle";ctx.fillText(a.s,a.x,a.y+1);const T=performance.now()/500;ctx.save();ctx.fillStyle="#fff";ctx.globalAlpha=.8;for(let k=0;k<3;k++){const an=T*(1+k*.4)+k*2.1,rr=r+5+k*2;ctx.beginPath();ctx.arc(a.x+Math.cos(an)*rr,a.y+Math.sin(an)*rr*(k?.55:1),1.6,0,6.283);ctx.fill()}ctx.restore()});
@@ -156,9 +157,29 @@ function draw(el){ctx.setTransform(dpr,0,0,dpr,0,0);ctx.fillStyle=ph==1||ph==2?"
  parts.forEach(p=>{ctx.globalAlpha=Math.max(0,p.l);ctx.fillStyle=p.c;ctx.beginPath();ctx.arc(p.x,p.y,2.5,0,6.283);ctx.fill()});
  rings.forEach(r=>{ctx.globalAlpha=Math.max(0,1-r.r/(Math.max(W,H)*.6));ctx.strokeStyle=r.c;ctx.lineWidth=4;ctx.beginPath();ctx.arc(r.x,r.y,r.r,0,6.283);ctx.stroke()});
  ctx.globalAlpha=1;ctx.restore();ctx.globalCompositeOperation="source-over";
- pops.forEach(p=>{ctx.globalAlpha=Math.min(1,p.l*1.5);ctx.fillStyle="#fff";ctx.font="700 22px system-ui";ctx.textAlign="center";ctx.shadowColor="#ffb347";ctx.shadowBlur=12;ctx.fillText(p.t,p.x,p.y);ctx.shadowBlur=0});ctx.globalAlpha=1;
+ pops.forEach(p=>{ctx.globalAlpha=Math.min(1,p.l*1.5);ctx.fillStyle="#fff";ctx.font="700 22px system-ui";ctx.textAlign="center";ctx.fillText(p.t,p.x,p.y)});ctx.globalAlpha=1;
  if(flash>.02){ctx.fillStyle=`rgba(255,240,200,${flash*.8})`;ctx.fillRect(0,0,W,H)}
  if(!atoms.length){ctx.fillStyle="#4a5688";ctx.font="14px system-ui";ctx.textAlign="center";ctx.fillText("反應爐是空的,點選上方元素吧",W/2,H/2)}}
+/* ---- game ---- */
+const QS=[["H2O","我們來合成「水」吧！請用元素做出水分子。"],["CO2","呼吸時吐出的「二氧化碳」，請你合成出來！"],["NaCl","川房裡的「食鹽」，化學式是 NaCl，試試看！"],["CH4","天然氣的主要成分「甲烷」，1 個碳要配幾個氫呢？"],["NH3","肥料的原料「氨」，由氮和氫組成。"],["O2","我們呼吸的「氧氣」是雙原子分子，怎麼做？"],["O3","保護地球的「臭氧」，比氧氣多一個原子。"],["MgO","霂帶燃燒會發出耀眼白光，生成「氧化霂」。"],["Fe2O3","鐵生锈會變成「氧化鐵」Fe₂O₃，試試看！"],["NaOH","最後挑戰！鈉遇到水會劇烈反應，生成「氫氧化鈉」。小心爆炸！"]];
+const PR=["太棒了！","你真聰明！","化學小天才！","繼續保持！"],gm={on:0,i:0,s:0,t:0,w:0,tu:-1};
+const bub=t=>$('bub').innerHTML=t,sc=()=>$('sc').textContent=gm.on?`第 ${gm.i+1}/10 題 ・ 得分 ${gm.s}`:"";
+const nx=()=>{$('gs').style.display="";$('gs').textContent=gm.i>=9?"看成績 🏆":"下一題 ▶"};
+function ask(){gm.t=0;gm.w=0;atoms=[];back();chips();$('gs').style.display="none";bub(`<b>第 ${gm.i+1} 題</b>（10 分）<br>${QS[gm.i][1]}`);sc();say("")}
+function fin(){gm.on=0;const s=gm.s;bub(`🏆 挑戰結束！總分 <b>${s}</b> / 100<br>${s>=90?"你是化學大師！":s>=60?"不錯喜，再練習就更棒了！":"沒關係，再挑戰一次吧！"}`);sc();$('gs').style.display="";$('gs').textContent="🔁 再挑戰一次"}
+$('gs').onclick=()=>{if(!gm.on){gm.on=1;gm.i=0;gm.s=0;gm.w=1;atoms=[];back();chips();$('gs').style.display="none";tut(0)}else if(gm.tu==4){gm.tu=-1;ask()}else{gm.i++;gm.i>=10?fin():ask()}};
+function judge(){const f=QS[gm.i][0],ok=res.mols.some(m=>m.f==f),cp=parse(f);gm.t++;
+ if(ok){gm.w=1;gm.s+=10;bub(`🎉 答對了！${sub(f)} 合成成功，<b>+10 分</b>！${PR[gm.i%4]}`);[659,784,988,1319].forEach((q,i)=>tone(q,.4,"sine",.12,0,i*.08));nx()}
+ else if(gm.t>=2){gm.w=1;bub(`這題有點難，沒關係！正確答案是 <b>${sub(f)}</b>：${cp.map(x=>x[1]+" 個 "+x[0]).join("、")}。`);tone(200,.4,"sine",.1,120);nx()}
+ else{bub(`再想想看～這次沒有做出 ${sub(f)}。<br>💡 提示：需要用到 ${cp.map(x=>x[0]).join("、")}。即將重新開始…`);setTimeout(()=>{if(gm.on&&!gm.w&&ph==3)back()},2800)}
+ sc()}
+const TT=[["第一步：點一下週期表左上角閃爍的 <b>H（氫）</b>，把它丟進反應爐。","H"],["很好！水需要 <b>2 個氫</b>，再點一次 H。","H"],["接著找到週期表右側閃爍的 <b>O（氧）</b>，點一下它！","O"],["最後按下閃爍的「🔥 反應」按鈕！","go"]];
+function hl(x){document.querySelectorAll('.hl').forEach(e=>e.classList.remove('hl'));if(x)x.classList.add('hl')}
+function tut(n){gm.tu=n;bub(`<b>🎓 教學關卡</b>（不計分）<br>${TT[n][0]}`);hl(TT[n][1]=="go"?$('go'):pt.children[zOf(TT[n][1])-1]);$('sc').textContent="教學 "+(n+1)+"/4"}
+function tutChk(){if(!gm.on||gm.tu<0||gm.tu>3)return;const c=s=>atoms.filter(a=>a.s==s).length,h=c("H"),o=c("O");
+ if(atoms.length>h+o||h>2||o>1){bub("<b>🎓 教學關卡</b><br>哎呀，材料不太對喔。這關只需要 <b>2 個 H 和 1 個 O</b>，點標籤的 ✕ 可以移除多餘的。");hl(null);return}
+ tut(h<1?0:h<2?1:o<1?2:3)}
+function tutEnd(){hl(null);gm.tu=4;bub("🎉 <b>教學完成！</b>你成功合成了水（H₂O）！<br>接下來是正式挑戰：共 10 題，每題 10 分，準備好了嗎？");$('sc').textContent="";[659,784,988,1319].forEach((q,i)=>tone(q,.4,"sine",.12,0,i*.08));$('gs').style.display="";$('gs').textContent="開始正式挑戰 ▶"}
 function mix(hex,t){const n=parseInt(hex.slice(1),16),r=n>>16,g=n>>8&255,b=n&255;return`rgb(${r+(255-r)*t|0},${g+(150-g)*t|0},${b+(60-b)*t|0})`}
 requestAnimationFrame(tick);
 </script></body></html>
